@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "enderfolds",
+    "name": "Ender Folds",
+    "description": "A remote item transfer mod with separate input and output blocks",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "TeamDman"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
