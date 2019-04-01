@@ -15,23 +15,23 @@ public class ItemShard extends Item {
 		setRegistryName("shard");
 		setTranslationKey("shard");
 	}
-
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		Block block = worldIn.getBlockState(pos).getBlock();
-		if (!(block instanceof BlockFold))
-			return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
-		if (((BlockFold) block).type == BlockFold.Type.DESTINATION)
-			return EnumActionResult.FAIL;
-		if (!(worldIn.getTileEntity(pos) instanceof TileFoldSource))
-			return EnumActionResult.FAIL;
-		ItemStack stack = player.getHeldItem(hand);
-
-		((TileFoldSource) worldIn.getTileEntity(pos)).readDestFromNBT(stack.getTagCompound());
-		stack.setCount(stack.getCount()-1);
-
-		return EnumActionResult.SUCCESS;
-	}
+//
+//	@Override
+//	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+//		Block block = worldIn.getBlockState(pos).getBlock();
+//		if (!(block instanceof BlockFold))
+//			return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+//		if (((BlockFold) block).type == BlockFold.Type.DESTINATION)
+//			return EnumActionResult.FAIL;
+//		if (!(worldIn.getTileEntity(pos) instanceof TileFoldSource))
+//			return EnumActionResult.FAIL;
+//
+//		ItemStack stack = player.getHeldItem(hand);
+//		//noinspection ConstantConditions
+//		((TileFoldSource) worldIn.getTileEntity(pos)).readDestFromNBT(stack.getTagCompound());
+//		stack.shrink(1);
+//		return EnumActionResult.SUCCESS;
+//	}
 
 
 }

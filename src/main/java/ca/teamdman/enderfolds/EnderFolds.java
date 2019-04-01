@@ -73,6 +73,7 @@ public class EnderFolds {
 	@GameRegistry.ObjectHolder(MOD_ID)
 	public static class Items {
 		public static final Item SHARD = net.minecraft.init.Items.AIR;
+		public static final Item CORE = net.minecraft.init.Items.AIR;
 	}
 
 	/**
@@ -87,6 +88,7 @@ public class EnderFolds {
 		@SubscribeEvent
 		public static void addItems(RegistryEvent.Register<Item> event) {
 			event.getRegistry().register(new ItemShard());
+			event.getRegistry().register(new ItemCore());
 			event.getRegistry().register(new ItemBlock(Blocks.SOURCE).setRegistryName(Blocks.SOURCE.getRegistryName()).setCreativeTab(Blocks.SOURCE.getCreativeTab()));
 			event.getRegistry().register(new ItemBlock(Blocks.DESTINATION).setRegistryName(Blocks.DESTINATION.getRegistryName()).setCreativeTab(Blocks.DESTINATION.getCreativeTab()));
 		}
@@ -121,6 +123,7 @@ public class EnderFolds {
 			registerBlockModel(Blocks.DESTINATION);
 			registerBlockModel(Blocks.SOURCE);
 			registerItemModel(Items.SHARD,0,Items.SHARD.getRegistryName().toString());
+			registerItemModel(Items.CORE,0,Items.CORE.getRegistryName().toString());
 		}
 	}
 }

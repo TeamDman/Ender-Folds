@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -47,21 +48,31 @@ public class BlockFold extends Block implements ITileEntityProvider {
 		return type == Type.SOURCE ? new TileFoldSource() : new TileFoldDestination();
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (type == Type.DESTINATION && playerIn.getHeldItem(hand).isEmpty()) {
-			ItemStack      stack    = new ItemStack(EnderFolds.Items.SHARD);
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setLong("pos", pos.toLong());
-			compound.setInteger("dim", worldIn.provider.getDimension());
-			stack.setTagCompound(compound);
-			playerIn.inventory.addItemStackToInventory(stack);
-			return true;
-		} else if (type == Type.SOURCE && playerIn.getHeldItem(hand).getItem() == EnderFolds.Items.SHARD) {
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if (tile instanceof TileFoldSource) {
-				((TileFoldSource) tile).readDestFromNBT(playerIn.getHeldItem(hand).getTagCompound());
-				playerIn.getHeldItem(hand).splitStack(1);
+		if (worldIn.isRemote || hand == EnumHand.OFF_HAND)
+			return false;
+		if (type == Type.DESTINATION) {
+			if (worldIn.getTileEntity(pos) instanceof TileFoldDestination) {
+				TileFoldDestination tile = ((TileFoldDestination) worldIn.getTileEntity(pos));
+				if (tile.hasCore) {
+					if (playerIn.getHeldItem(hand).isEmpty()) {
+						playerIn.inventory.addItemStackToInventory(tile.removeCore());
+						return true;
+					}
+				} else {
+					return ((TileFoldDestination) worldIn.getTileEntity(pos)).insertCore(playerIn.getHeldItem(hand));
+				}
+			}
+		} else if (type == Type.SOURCE) {
+			if (playerIn.getHeldItem(hand).getItem() == EnderFolds.Items.SHARD) {
+				TileEntity tile = worldIn.getTileEntity(pos);
+				if (tile instanceof TileFoldSource) {
+					((TileFoldSource) tile).readDestFromNBT(playerIn.getHeldItem(hand).getTagCompound());
+					playerIn.getHeldItem(hand).splitStack(1);
+					return true;
+				}
 			}
 		}
 		return false;
