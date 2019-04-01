@@ -44,19 +44,25 @@ public class BlockFold extends Block implements ITileEntityProvider {
 	@Nullable
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return type == Type.SOURCE ? new TileFoldDestination() : new TileFoldSource();
+		return type == Type.SOURCE ? new TileFoldSource() : new TileFoldDestination();
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (playerIn.getHeldItem(hand).isEmpty()) {
-			ItemStack stack = new ItemStack(EnderFolds.Items.LINKER);
+		if (type == Type.DESTINATION && playerIn.getHeldItem(hand).isEmpty()) {
+			ItemStack      stack    = new ItemStack(EnderFolds.Items.SHARD);
 			NBTTagCompound compound = new NBTTagCompound();
-			compound.setLong("pos",pos.toLong());
+			compound.setLong("pos", pos.toLong());
 			compound.setInteger("dim", worldIn.provider.getDimension());
 			stack.setTagCompound(compound);
 			playerIn.inventory.addItemStackToInventory(stack);
 			return true;
+		} else if (type == Type.SOURCE && playerIn.getHeldItem(hand).getItem() == EnderFolds.Items.SHARD) {
+			TileEntity tile = worldIn.getTileEntity(pos);
+			if (tile instanceof TileFoldSource) {
+				((TileFoldSource) tile).readDestFromNBT(playerIn.getHeldItem(hand).getTagCompound());
+				playerIn.getHeldItem(hand).splitStack(1);
+			}
 		}
 		return false;
 	}

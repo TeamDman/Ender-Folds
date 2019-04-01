@@ -10,10 +10,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemLinker extends Item {
-	public ItemLinker() {
-		setRegistryName("linker");
-		setTranslationKey("linker");
+public class ItemShard extends Item {
+	public ItemShard() {
+		setRegistryName("shard");
+		setTranslationKey("shard");
 	}
 
 	@Override
