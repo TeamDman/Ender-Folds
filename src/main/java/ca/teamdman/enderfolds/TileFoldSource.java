@@ -29,9 +29,17 @@ public class TileFoldSource extends TileEntity { //implements ISidedInventory {
 		TileFoldDestination dest = getDestination();
 		if (dest == null)
 			return false;
-		TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(facing.getOpposite()));
-		if (tile != null)
-			return tile.hasCapability(capability, facing);
+		if (facing != null) {
+			TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(facing.getOpposite()));
+			if (tile != null)
+				return tile.hasCapability(capability, facing);
+		} else {
+			for (EnumFacing face : EnumFacing.VALUES) {
+				TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(face));
+				if (tile != null && tile.hasCapability(capability, face))
+					return true;
+			}
+		}
 		return false;
 	}
 
@@ -41,9 +49,17 @@ public class TileFoldSource extends TileEntity { //implements ISidedInventory {
 		TileFoldDestination dest = getDestination();
 		if (dest == null)
 			return null;
-		TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(facing.getOpposite()));
-		if (tile != null)
-			return tile.getCapability(capability, facing);
+		if (facing != null) {
+			TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(facing.getOpposite()));
+			if (tile != null)
+				return tile.getCapability(capability, facing);
+		} else {
+			for (EnumFacing face : EnumFacing.VALUES) {
+				TileEntity tile = dest.getWorld().getTileEntity(dest.getPos().offset(face));
+				if (tile != null && tile.getCapability(capability, face) != null)
+					return tile.getCapability(capability, face);
+			}
+		}
 		return null;
 	}
 

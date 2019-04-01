@@ -17,13 +17,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TileFoldDestination extends TileEntity {
-	public Set<String> owners = new HashSet<>();
 	public boolean hasCore = true;
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		if (compound.hasKey("owners") && compound.hasKey("hasCore")) {
-			compound.getTagList("owners", 9).forEach(base -> owners.add(base.toString()));
+		if (compound.hasKey("hasCore")) {
 			this.hasCore = compound.getBoolean("hasCore");
 		}
 
@@ -33,15 +31,9 @@ public class TileFoldDestination extends TileEntity {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagList list = new NBTTagList();
-		owners.forEach(owner -> list.appendTag(new NBTTagString(owner)));
 		compound.setTag("owners", list);
 		compound.setBoolean("hasCore", this.hasCore);
 		return super.writeToNBT(compound);
-	}
-
-	public void addOwner(String owner) {
-		owners.add(owner);
-		markDirty();
 	}
 
 	public ItemStack removeCore() {
