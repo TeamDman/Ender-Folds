@@ -10,7 +10,7 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nullable;
 
-public class TileFoldSource extends TileEntity { //implements ISidedInventory {
+public class TileFoldSource extends TileEntity {
 	public BlockPos destPos;
 	public int      destDim;
 
@@ -65,6 +65,7 @@ public class TileFoldSource extends TileEntity { //implements ISidedInventory {
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
 		readDestFromNBT(compound);
 	}
 
@@ -73,6 +74,7 @@ public class TileFoldSource extends TileEntity { //implements ISidedInventory {
 		if (destPos != null) {
 			compound.setLong("pos", destPos.toLong());
 			compound.setInteger("dim", destDim);
+			System.out.println("Wrote to nbt");
 		}
 		return super.writeToNBT(compound);
 	}

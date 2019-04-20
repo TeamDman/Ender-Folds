@@ -7,10 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +17,7 @@ import javax.annotation.Nullable;
 
 import static ca.teamdman.enderfolds.EnderFolds.MOD_ID;
 
-public class BlockFold extends Block implements ITileEntityProvider {
+public class BlockFold extends Block {
 	enum Type {
 		SOURCE,
 		DESTINATION
@@ -34,18 +31,26 @@ public class BlockFold extends Block implements ITileEntityProvider {
 		if (type == Type.SOURCE) {
 			setRegistryName(MOD_ID, "source");
 			setTranslationKey("source");
+			setHardness(3);
 		} else {
 			setRegistryName(MOD_ID, "destination");
 			setTranslationKey("destination");
+			if (Config.general.indestructibleDestinations) {
+				setHardness(-1);
+			}
 		}
-		setHardness(3);
 		setCreativeTab(CreativeTabs.DECORATIONS);
 	}
 
 	@Nullable
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return type == Type.SOURCE ? new TileFoldSource() : new TileFoldDestination();
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -70,6 +75,7 @@ public class BlockFold extends Block implements ITileEntityProvider {
 				TileEntity tile = worldIn.getTileEntity(pos);
 				if (tile instanceof TileFoldSource) {
 					((TileFoldSource) tile).readDestFromNBT(playerIn.getHeldItem(hand).getTagCompound());
+					tile.markDirty();
 					playerIn.getHeldItem(hand).splitStack(1);
 					return true;
 				}

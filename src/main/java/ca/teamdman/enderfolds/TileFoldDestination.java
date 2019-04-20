@@ -30,8 +30,6 @@ public class TileFoldDestination extends TileEntity {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		NBTTagList list = new NBTTagList();
-		compound.setTag("owners", list);
 		compound.setBoolean("hasCore", this.hasCore);
 		return super.writeToNBT(compound);
 	}
