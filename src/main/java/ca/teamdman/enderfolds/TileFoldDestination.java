@@ -40,12 +40,13 @@ public class TileFoldDestination extends TileEntity {
 		compound.setLong("pos", pos.toLong());
 		compound.setInteger("dim", world.provider.getDimension());
 		stack.setTagCompound(compound);
-		this.hasCore = false;
+		if (Config.general.unqiueCores)
+			this.hasCore = false;
 		markDirty();
 		return stack;
 	}
 
-	public boolean insertCore(ItemStack stack) {
+	public boolean attemptInsertCore(ItemStack stack) {
 		if (stack == null || stack.isEmpty() || stack.getItem() != EnderFolds.Items.CORE)
 			return false;
 		NBTTagCompound compound = stack.getTagCompound();

@@ -1,7 +1,6 @@
 package ca.teamdman.enderfolds;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -69,7 +68,7 @@ public class BlockFold extends Block {
 						return true;
 					}
 				} else {
-					return ((TileFoldDestination) worldIn.getTileEntity(pos)).insertCore(playerIn.getHeldItem(hand));
+					return ((TileFoldDestination) worldIn.getTileEntity(pos)).attemptInsertCore(playerIn.getHeldItem(hand));
 				}
 			}
 		} else if (type == Type.SOURCE) {
