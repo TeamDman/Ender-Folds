@@ -37,6 +37,8 @@ public class BlockFold extends Block {
 			setTranslationKey("destination");
 			if (Config.general.indestructibleDestinations) {
 				setHardness(-1);
+			} else {
+				setHardness(3);
 			}
 		}
 		setCreativeTab(CreativeTabs.DECORATIONS);
